@@ -6,3 +6,4 @@ Učenie hrou pre Huga (3) a Oliverka (6). Jedna HTML stránka bez inštalácie: 
 - otázky číta hlas prehliadača (slovenský hlas, ak je dostupný)
 - postup sa ukladá v prehliadači (localStorage)
 - písma sa načítavajú z Google Fonts, bez internetu sa použije systémové písmo
+- Oliverko má navyše náročnejšie levely do 20: sčítanie, odčítanie, číselné rady, dvojice, porovnávanie a hodiny

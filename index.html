@@ -201,7 +201,7 @@ var KIDS={
     return{text:'Vyber farbu, ktorá nasleduje.',pic:a+b+a+b+a+' <span class="eq">?</span>',big:true,opts:shuffle([a,b,c]).map(function(x){return{h:x,v:x}}),ans:b}}},
   {t:'Nájdi a označ',h:'Ťukni na všetky rovnaké',icon:'👆',speak:true,make:function(){return findQ(9,3,2,3)}}
  ]},
- oliver:{name:'Oliverko',ageText:'6 rokov',face:'🚀',stickers:['🚀','🪐','🤖','🏆','👑','🛸','🦖','🌈','🚒','🏅','🌟','🧩','🎁'],levels:[
+ oliver:{name:'Oliverko',ageText:'6 rokov',face:'🚀',stickers:['🚀','🪐','🤖','🏆','👑','🛸','🦖','🌈','🚒','🏅','🌟','🧩','🎁','🎲','🧠','⭐','🧸','🔭','🎯','🦉','🏰','💎'],levels:[
   {t:'Počítame do 5',h:'Koľko vidíš?',icon:'🖐️',speak:true,make:function(){return countQ(1,5)}},
   {t:'Ktoré číslo nasleduje',h:'Čo príde po čísle',icon:'➡️',speak:true,make:function(){var n=rnd(1,9);return{text:'Vyber číslo, ktoré nasleduje po '+n+'.',eq:n+' → ?',opts:numOpts(n+1,1,10),ans:n+1}}},
   {t:'Viac alebo menej',h:'Ktorá skupina je väčšia?',icon:'⚖️',speak:true,make:function(){return compareQ(10,'1.5rem')}},
@@ -218,7 +218,32 @@ var KIDS={
   {t:'Označ toľko',h:'Ťukni presne toľkokrát',icon:'☝️',speak:true,make:function(){return tapnQ(10)}},
   {t:'Počítame do 10',h:'Koľko vidíš, 1 až 10?',icon:'🔟',speak:true,make:function(){return countQ(4,10)}},
   {t:'Sčítame do 10',h:'Koľko je to spolu?',icon:'➕',speak:true,make:function(){return sumQ(10)}},
-  {t:'Odčítame do 10',h:'Koľko ostalo?',icon:'➖',speak:true,make:function(){return subQ(10)}}
+  {t:'Odčítame do 10',h:'Koľko ostalo?',icon:'➖',speak:true,make:function(){return subQ(10)}},
+  {t:'Počítame do 20',h:'Veľké počítanie od 11 do 20',icon:'🔢',speak:true,make:function(){return countQ(11,20)}},
+  {t:'Čísla 11 až 20',h:'Ktoré číslo nasleduje?',icon:'➡️',speak:true,make:function(){var n=rnd(10,19);return{text:'Vyber číslo, ktoré nasleduje po '+n+'.',eq:n+' → ?',opts:numOpts(n+1,11,20),ans:n+1}}},
+  {t:'Sčítame do 20',h:'Náročnejšie príklady spolu',icon:'➕',speak:true,make:function(){return sumQ(20)}},
+  {t:'Odčítame do 20',h:'Koľko ostane?',icon:'➖',speak:true,make:function(){return subQ(20)}},
+  {t:'Čo chýba?',h:'Doplň chýbajúce číslo v rade',icon:'🧩',speak:true,make:function(){var s=rnd(10,14),step=pick([1,2]),h=rnd(1,3),m=s+(h*step),items='';
+    for(var i=0;i<5;i++){items+=i===h?'<b class="hole">?</b>':'<b>'+((s)+(i*step))+'</b>'}
+    return{text:'Doplň číslo, ktoré chýba v rade.',seq:items,opts:numOpts(m,10,20),ans:m}}},
+  {t:'Čísla sa porovnávajú',h:'Vyber väčšie alebo menšie číslo',icon:'⚖️',speak:true,make:function(){var a=rnd(5,18),b=rnd(5,18);while(b===a)b=rnd(5,18);var bigger=Math.random()<.5;
+    return{text:bigger?'Ťukni na väčšie číslo.':'Ťukni na menšie číslo.',opts:shuffle([{h:'<span class="num">'+a+'</span>',v:a},{h:'<span class="num">'+b+'</span>',v:b},{h:'<span class="num">'+(bigger?Math.max(a,b)+rnd(1,2):Math.min(a,b)-rnd(1,2))+'</span>',v:'wrong'}]),ans:bigger?Math.max(a,b):Math.min(a,b)}}},
+  {t:'Koľko treba pridať?',h:'Dokonči príklad do 20',icon:'🎯',speak:true,make:function(){var a=rnd(4,15),b=rnd(1,20-a),target=a+b;
+    return{text:'Koľko treba pridať?',pic:'<span class="eq">'+a+'</span> + <span class="eq">?</span> = <span class="eq">'+target+'</span>',opts:numOpts(b,1,16),ans:b}}},
+  {t:'Párne a nepárne',h:'Vyber správnu skupinu čísel',icon:'🎲',speak:true,make:function(){var even=Math.random()<.5,n=rnd(2,18);
+    var good=[],wrong=[];for(var i=0;i<4;i++){var g=even?rnd(1,9)*2:rnd(1,9)*2-1;good.push(g)}
+    for(var j=0;j<3;j++){wrong.push(even?(rnd(1,9)*2-1):(rnd(1,9)*2))}
+    good=shuffle(good);var ans=pick(good);
+    return{text:even?'Vyber párne číslo.':'Vyber nepárne číslo.',opts:shuffle([{h:'<span class="num">'+ans+'</span>',v:ans},{h:'<span class="num">'+pick(wrong)+'</span>',v:'wrong1'},{h:'<span class="num">'+pick(wrong)+'</span>',v:'wrong2'}]),ans:ans}}},
+  {t:'Dvojnásobok',h:'Sčítaj rovnaké čísla',icon:'🧠',speak:true,make:function(){var a=rnd(2,9),o=pick(['🍎','⭐','🎈','🦋']);
+    return{text:'Koľko je to spolu?',pic:rep(o,a)+' <span class="eq">+</span> '+rep(o,a),eq:a+' + '+a+' = ?',opts:numOpts(a*2,4,18),ans:a*2}}},
+  {t:'Počítame po dvoch',h:'2, 4, 6…',icon:'👣',speak:true,make:function(){var start=2,h=rnd(1,3),m=start+(h*2),items='';
+    for(var i=0;i<5;i++){var v=start+(i*2);if(i===h){items+='<b class="hole">?</b>'}else items+='<b>'+v+'</b>'}
+    return{text:'Doplň číslo do radu po dvoch.',seq:items,opts:numOpts(m,1,20),ans:m}}},
+  {t:'Náročné skladanie',h:'Tri čísla spolu',icon:'🏆',speak:true,make:function(){var a=rnd(2,6),b=rnd(2,6),c=rnd(2,6),sum=a+b+c;
+    return{text:'Koľko je všetko spolu?',eq:a+' + '+b+' + '+c+' = ?',opts:numOpts(sum,6,18),ans:sum}}},
+  {t:'Hodinový lovec',h:'Vyber koľko hodín ukazuje ciferník',icon:'🕐',speak:true,make:function(){var h=rnd(1,12),angle=h*30,clock='<svg class="shape lg" viewBox="0 0 100 100" aria-label="'+h+' hodín"><circle cx="50" cy="50" r="46" fill="var(--surface)" stroke="var(--fg)" stroke-width="4"/><line x1="50" y1="50" x2="50" y2="16" stroke="var(--fg)" stroke-width="6" stroke-linecap="round"/><line x1="50" y1="50" x2="'+(50+30*Math.sin(angle*Math.PI/180)).toFixed(1)+'" y2="'+(50-30*Math.cos(angle*Math.PI/180)).toFixed(1)+'" stroke="var(--kid)" stroke-width="7" stroke-linecap="round"/><circle cx="50" cy="50" r="4" fill="var(--fg)"/></svg>';
+    return{text:'Koľko hodín ukazuje ciferník?',pic:clock,opts:numOpts(h,1,12),ans:h}}}
  ]}
 };
 
