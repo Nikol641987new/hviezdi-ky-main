@@ -201,7 +201,7 @@ var KIDS={
     return{text:'Vyber farbu, ktorá nasleduje.',pic:a+b+a+b+a+' <span class="eq">?</span>',big:true,opts:shuffle([a,b,c]).map(function(x){return{h:x,v:x}}),ans:b}}},
   {t:'Nájdi a označ',h:'Ťukni na všetky rovnaké',icon:'👆',speak:true,make:function(){return findQ(9,3,2,3)}}
  ]},
- oliver:{name:'Oliverko',ageText:'6 rokov',face:'🚀',stickers:['🚀','🪐','🤖','🏆','👑','🛸','🦖','🌈','🚒','🏅','🌟','🧩','🎁','🎲','🧠','⭐','🧸','🔭','🎯','🦉','🏰','💎'],levels:[
+ oliver:{name:'Oliverko',ageText:'6 rokov',face:'🚀',stickers:['🚀','🪐','🤖','🏆','👑','🛸','🦖','🌈','🚒','🏅','🌟','🧩','🎁','🎲','🧠','⭐','🧸','🔭','🎯','🦉','🏰','💎','🐧','🦊','🎵','📚'],levels:[
   {t:'Počítame do 5',h:'Koľko vidíš?',icon:'🖐️',speak:true,make:function(){return countQ(1,5)}},
   {t:'Ktoré číslo nasleduje',h:'Čo príde po čísle',icon:'➡️',speak:true,make:function(){var n=rnd(1,9);return{text:'Vyber číslo, ktoré nasleduje po '+n+'.',eq:n+' → ?',opts:numOpts(n+1,1,10),ans:n+1}}},
   {t:'Viac alebo menej',h:'Ktorá skupina je väčšia?',icon:'⚖️',speak:true,make:function(){return compareQ(10,'1.5rem')}},
@@ -249,6 +249,7 @@ var KIDS={
 
 var app=document.getElementById('app');
 var cur=null,L=null,run=null;
+function stickerFor(k,i){return k.stickers[i]||'⭐'}
 
 function setKid(k){cur=k;document.body.setAttribute('data-kid',k||'')}
 function starsPill(){return '<span class="pill"><span class="s">★</span>'+state[cur].stars+'</span>'}
@@ -268,8 +269,8 @@ function home(){
   app.innerHTML='<div class="top"><button class="btn ghost" id="back" style="min-height:44px;padding:8px 18px;font-size:1rem">← Späť</button>'+starsPill()+'</div>'+
    '<header><h1>Ahoj, '+K.name+'!</h1><p class="muted">Vyber si level. Každý má 5 otázok.</p></header>'+
    '<ol class="path">'+lv.map(function(l,i){var done=!!S.done[i],locked=i>0&&!S.done[i-1];
-     return '<li><button class="lvl'+(i===nextIdx?' next':'')+'" data-i="'+i+'"'+(locked?' disabled':'')+'><span class="n">'+(i+1)+'</span><span class="t"><h3>'+l.t+'</h3><span class="muted">'+l.h+'</span></span><span class="r">'+(done?K.stickers[i]:(locked?'🔒':l.icon))+'</span></button></li>'}).join('')+'</ol>'+
-   '<section><h3 style="margin-bottom:10px">Moje nálepky</h3><div class="shelf">'+K.stickers.map(function(s,i){return '<span class="'+(S.done[i]?'':'empty')+'">'+s+'</span>'}).join('')+'</div></section>'+
+     return '<li><button class="lvl'+(i===nextIdx?' next':'')+'" data-i="'+i+'"'+(locked?' disabled':'')+'><span class="n">'+(i+1)+'</span><span class="t"><h3>'+l.t+'</h3><span class="muted">'+l.h+'</span></span><span class="r">'+(done?stickerFor(K,i):(locked?'🔒':l.icon))+'</span></button></li>'}).join('')+'</ol>'+
+   '<section><h3 style="margin-bottom:10px">Moje nálepky</h3><div class="shelf">'+lv.map(function(l,i){return '<span class="'+(S.done[i]?'':'empty')+'">'+stickerFor(K,i)+'</span>'}).join('')+'</div></section>'+
    '<div id="vbox">'+voiceUI()+'</div><div class="foot"><button class="link" id="reset">Vynulovať postup</button></div>';
   document.getElementById('back').onclick=profiles;
   app.querySelectorAll('.lvl').forEach(function(b){b.onclick=function(){start(+b.dataset.i)}});
@@ -328,7 +329,7 @@ function finish(){
   var st='';for(var i=0;i<5;i++)st+='<span class="'+(i<run.earned?'':'off')+'">★</span>';
   var hasNext=run.i<K.levels.length-1;
   app.innerHTML='<div class="done"><h1>Výborne, '+K.name+'!</h1><div class="stars" aria-label="'+run.earned+' z 5 hviezdičiek">'+st+'</div>'+
-   '<div class="sticker">'+K.stickers[run.i]+'</div><p class="muted">Získal si novú nálepku. Spolu máš ★ '+state[cur].stars+'.</p>'+
+   '<div class="sticker">'+stickerFor(K,run.i)+'</div><p class="muted">Získal si novú nálepku. Spolu máš ★ '+state[cur].stars+'.</p>'+
    '<div class="actions">'+(hasNext?'<button class="btn" id="nx">Ďalší level</button>':'')+'<button class="btn ghost" id="again">Ešte raz</button><button class="btn ghost" id="hm">Domov</button></div></div>';
   say('Výborne '+(cur==='oliver'?'Oli':K.name));
   if(hasNext)document.getElementById('nx').onclick=function(){start(run.i+1)};
