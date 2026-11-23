@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hviezdičky</title>
+<meta name="theme-color" content="#EEF3F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hviezdičky">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap">
 <style>
 /* Layout: one calm column, big tap targets. Profile picker -> level path -> 5-question round -> sticker reward. */
@@ -87,6 +94,9 @@ body[data-kid="hugo"] .lvl .n{color:#241600}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 .brand{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 .logo{width:min(230px,70%);height:auto;display:block}
+.mini-logo{width:54px;height:54px;display:block;flex:none}
+.top.logo-top{justify-content:flex-start}
+.top.logo-top .stars-pill{margin-left:auto}
 /* find & tap */
 .board{display:grid;gap:8px;width:100%}
 .cell{aspect-ratio:1;min-height:56px;padding:0;border-radius:18px;background:var(--bg);border:3px solid var(--line);font-size:clamp(1.5rem,7vw,2.6rem);display:grid;place-items:center}
@@ -250,6 +260,7 @@ var KIDS={
 var app=document.getElementById('app');
 var cur=null,L=null,run=null;
 function stickerFor(k,i){return k.stickers[i]||'⭐'}
+function miniLogo(){return '<svg class="mini-logo" viewBox="0 0 230 140" role="img" aria-label="Hviezdičky"><polygon points="80,24 95,56 130,60 104,84 111,118 80,101 49,118 56,84 31,60 65,56" fill="var(--oliver)" stroke="var(--oliver)" stroke-width="10" stroke-linejoin="round"/><polygon points="168,70 177,88 197,91 182,105 186,124 168,115 150,124 154,105 140,91 159,88" fill="var(--hugo)" stroke="var(--hugo)" stroke-width="10" stroke-linejoin="round"/><g fill="#1E2B27"><circle cx="68" cy="72" r="4.5"/><circle cx="92" cy="72" r="4.5"/><circle cx="160" cy="97" r="3.5"/><circle cx="176" cy="97" r="3.5"/></g><g fill="none" stroke="#1E2B27" stroke-width="3.5" stroke-linecap="round"><path d="M67 85 Q80 97 93 85"/><path d="M161 107 Q168 114 175 107"/></g></svg>'}
 
 function setKid(k){cur=k;document.body.setAttribute('data-kid',k||'')}
 function starsPill(){return '<span class="pill"><span class="s">★</span>'+state[cur].stars+'</span>'}
@@ -266,7 +277,7 @@ function profiles(){
 function home(){
   var K=KIDS[cur],S=state[cur],lv=K.levels;
   var nextIdx=-1;for(var i=0;i<lv.length;i++){if(!S.done[i]){nextIdx=i;break}}
-  app.innerHTML='<div class="top"><button class="btn ghost" id="back" style="min-height:44px;padding:8px 18px;font-size:1rem">← Späť</button>'+starsPill()+'</div>'+
+  app.innerHTML='<div class="top logo-top">'+miniLogo()+'<button class="btn ghost" id="back" style="min-height:44px;padding:8px 18px;font-size:1rem">← Späť</button><span class="stars-pill">'+starsPill()+'</span></div>'+
    '<header><h1>Ahoj, '+K.name+'!</h1><p class="muted">Vyber si level. Každý má 5 otázok.</p></header>'+
    '<ol class="path">'+lv.map(function(l,i){var done=!!S.done[i],locked=i>0&&!S.done[i-1];
      return '<li><button class="lvl'+(i===nextIdx?' next':'')+'" data-i="'+i+'"'+(locked?' disabled':'')+'><span class="n">'+(i+1)+'</span><span class="t"><h3>'+l.t+'</h3><span class="muted">'+l.h+'</span></span><span class="r">'+(done?stickerFor(K,i):(locked?'🔒':l.icon))+'</span></button></li>'}).join('')+'</ol>'+
@@ -291,7 +302,7 @@ function start(i){
 function question(){
   var K=KIDS[cur],q=run.qs[run.q];run.first=true;
   var dots='';for(var d=0;d<5;d++){dots+='<i class="'+(d<run.marks.length?(run.marks[d]?'ok':'on'):(d===run.q?'on':''))+'"></i>'}
-  app.innerHTML='<div class="top"><button class="btn ghost" id="quit" style="min-height:44px;padding:8px 18px;font-size:1rem">✕ Domov</button>'+starsPill()+'</div>'+
+  app.innerHTML='<div class="top logo-top">'+miniLogo()+'<button class="btn ghost" id="quit" style="min-height:44px;padding:8px 18px;font-size:1rem">✕ Domov</button><span class="stars-pill">'+starsPill()+'</span></div>'+
    '<div class="dots" aria-label="Otázka '+(run.q+1)+' z 5">'+dots+'</div>'+
    '<section class="q"><p class="say">'+q.text+'</p><button class="speak" id="spk" aria-label="Prečítať nahlas">🔊</button>'+
    (q.pic?'<div class="pic'+(q.big?' big':'')+'">'+q.pic+'</div>':'')+
