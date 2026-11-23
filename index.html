@@ -237,7 +237,7 @@ var KIDS={
     for(var i=0;i<5;i++){items+=i===h?'<b class="hole">?</b>':'<b>'+((s)+(i*step))+'</b>'}
     return{text:'Doplň číslo, ktoré chýba v rade.',seq:items,opts:numOpts(m,10,20),ans:m}}},
   {t:'Čísla sa porovnávajú',h:'Vyber väčšie alebo menšie číslo',icon:'⚖️',speak:true,make:function(){var a=rnd(5,18),b=rnd(5,18);while(b===a)b=rnd(5,18);var bigger=Math.random()<.5;
-    return{text:bigger?'Ťukni na väčšie číslo.':'Ťukni na menšie číslo.',opts:shuffle([{h:'<span class="num">'+a+'</span>',v:a},{h:'<span class="num">'+b+'</span>',v:b},{h:'<span class="num">'+(bigger?Math.max(a,b)+rnd(1,2):Math.min(a,b)-rnd(1,2))+'</span>',v:'wrong'}]),ans:bigger?Math.max(a,b):Math.min(a,b)}}},
+    return{text:bigger?'Ťukni na väčšie číslo.':'Ťukni na menšie číslo.',opts:shuffle([{h:'<span class="num">'+a+'</span>',v:a},{h:'<span class="num">'+b+'</span>',v:b}]),ans:bigger?Math.max(a,b):Math.min(a,b)}}},
   {t:'Koľko treba pridať?',h:'Dokonči príklad do 20',icon:'🎯',speak:true,make:function(){var a=rnd(4,15),b=rnd(1,20-a),target=a+b;
     return{text:'Koľko treba pridať?',pic:'<span class="eq">'+a+'</span> + <span class="eq">?</span> = <span class="eq">'+target+'</span>',opts:numOpts(b,1,16),ans:b}}},
   {t:'Párne a nepárne',h:'Vyber správnu skupinu čísel',icon:'🎲',speak:true,make:function(){var even=Math.random()<.5,n=rnd(2,18);
